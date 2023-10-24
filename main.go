@@ -43,7 +43,6 @@ const layout = `
 		</head>
 		<body>
 			<div hx-ext="sse" sse-connect="/sse" sse-swap="message"></div>
-			<div hx-sse="connect:/sse" sse-swap="message"></div>
 		</body>
 	</html>
 `
