@@ -21,6 +21,7 @@ func main() {
 func run() error {
 	http.Handle("/static/", http.FileServer(http.FS(static)))
 	http.HandleFunc("/sse", handleSSE)
+	http.HandleFunc("/poll", handlePoll)
 	http.HandleFunc("/", handleHome)
 	log.Println("listen on :8080")
 	return http.ListenAndServe(":8080", nil)
@@ -43,12 +44,17 @@ const layout = `
 		</head>
 		<body>
 			<div hx-ext="sse" sse-connect="/sse" sse-swap="message"></div>
+			<div hx-get="/poll" hx-trigger="every 1s"></div>
 		</body>
 	</html>
 `
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(layout))
+}
+
+func handlePoll(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "poll %d. <a href=\"https://github.com/bigskysoftware/htmx/pull/1794\">Here</a> is a fantastic pr.", rand.Intn(1000))
 }
 
 func handleSSE(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +66,7 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 	for {
 		select {
 		case <-tick.C:
-			fmt.Fprintf(w, "data: hello %d. <a href=\"https://github.com/bigskysoftware/htmx/pull/1794\">Here</a> is a fantastic pr.\n\n", rand.Intn(1000))
+			fmt.Fprintf(w, "data: sse %d. <a href=\"https://github.com/bigskysoftware/htmx/pull/1794\">Here</a> is a fantastic pr.\n\n", rand.Intn(1000))
 			w.(http.Flusher).Flush()
 		case <-r.Context().Done():
 			return
