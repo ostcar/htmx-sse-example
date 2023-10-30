@@ -54,7 +54,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlePoll(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "poll %d. <a href=\"https://github.com/bigskysoftware/htmx/pull/1794\">Here</a> is a fantastic pr.", rand.Intn(1000))
+	fmt.Fprintf(w, "poll %d. <strong>this is a </strong> <a href=\"https://github.com/bigskysoftware/htmx/pull/1794\">Here</a> is a fantastic pr.", rand.Intn(1000))
 }
 
 func handleSSE(w http.ResponseWriter, r *http.Request) {
